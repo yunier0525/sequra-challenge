@@ -9,8 +9,12 @@ class Disburse extends Model
 {
     use HasFactory;
 
+    public $table = 'disbursements';
+
     protected $fillable = [
+        'merchant_id',
         'disburse',
-        'week'
+        'week',
+        'year'
     ];
 }
