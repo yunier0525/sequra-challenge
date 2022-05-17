@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Disburse;
-use App\Models\Merchant;
 use DateTime;
 
 class DisburseRepository
@@ -23,13 +22,36 @@ class DisburseRepository
         }
     }
 
-    public function find(int $merchantId, int $week, int $year)
+    public function baseQuery(int $week, int $merchantId = null, int $year = null)
     {
-        return Disburse::query()
-            ->where('merchant_id', $merchantId)
-            ->where('week', $week)
-            ->where('year', $year)
-            ->first();
+        $query = Disburse::query()
+            ->where('week', $week);
+
+        if (!empty($merchantId)) {
+            $query->where('merchant_id', $merchantId);
+        }
+
+        if (!empty($year)) {
+            $query->where('year', $year);
+        } else {
+            $query->orderBy('year', 'desc');
+        }
+
+        return $query;
+    }
+
+    public function find(int $merchantId, int $week, int $year = null)
+    {
+        $query = $this->baseQuery($week, $merchantId, $year);
+
+        return $query->first();
+    }
+
+    public function getAll(int $week, int $merchantId = null, int $year = null)
+    {
+        $query = $this->baseQuery($week, $merchantId, $year);
+
+        return $query->get();
     }
 
     public function create(int $merchantId, float $amount, int $week, int $year): void
