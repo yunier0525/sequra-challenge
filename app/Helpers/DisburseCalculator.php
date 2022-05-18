@@ -2,26 +2,32 @@
 
 namespace App\Helpers;
 
+use Brick\Math\RoundingMode;
+use Brick\Money\Money;
+
 class DisburseCalculator
 {
     /**
      * Calculate disburse of a given amount of money
      *
-     * @param float $amount
-     * @return float
+     * @param Money $amount
+     * @return Money
      */
-    public static function calculateDisburse(float $amount): float
+    public static function calculateDisburse(Money $amount): Money
     {
-        if ($amount < 50) {
-            return $amount - ($amount * 0.01);
+        $reference50 = Money::of(50, 'EUR');
+        $reference300 = Money::of(300, 'EUR');
+
+        if ($amount->isLessThan($reference50)) {
+            return $amount->minus($amount->multipliedBy(0.01, RoundingMode::DOWN), RoundingMode::DOWN);
         }
 
-        if ($amount >= 50 && $amount <= 300) {
-            return $amount - ($amount * 0.0095);
+        if ($amount->isGreaterThanOrEqualTo($reference50) && $amount->isLessThanOrEqualTo($reference300)) {
+            return $amount->minus($amount->multipliedBy(0.0095, RoundingMode::DOWN), RoundingMode::DOWN);
         }
 
-        if ($amount > 300) {
-            return $amount - ($amount * 0.0085);
+        if ($amount->isGreaterThan($reference300)) {
+            return $amount->minus($amount->multipliedBy(0.0085, RoundingMode::DOWN), RoundingMode::DOWN);
         }
     }
 }
