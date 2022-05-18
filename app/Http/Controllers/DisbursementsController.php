@@ -23,6 +23,7 @@ class DisbursementsController extends Controller
         $merchantId = $request->input('merchant');
         $week = $request->input('week');
 
+        // Week param is required
         if (empty($week)) {
             return response()->json([
                 'status' => 'error',
@@ -31,10 +32,12 @@ class DisbursementsController extends Controller
         }
 
         if (!empty($merchantId)) {
+            // If merchant is defined get disbursement info only for that merchant
             $disburse = $this->disburseRepository->find($merchantId, $week);
 
             return new DisburseResource($disburse);
         } else {
+            // If merchant is not defined get disbursements info for all of them
             $disburses = $this->disburseRepository->getAll($week);
 
             return new DisburseCollection($disburses);

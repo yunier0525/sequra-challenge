@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Collection;
 
 class OrderRepository
 {
+    /**
+     * Find all orders completed and unprocessed (disburse not calculated)
+     *
+     * @param integer|null $limit
+     * @return Collection
+     */
     public function findCompletedNotProcessedOrders(int $limit = null): Collection
     {
         $orders = Order::query()
@@ -20,6 +26,13 @@ class OrderRepository
         return $orders->get();
     }
 
+    /**
+     * Update Order
+     *
+     * @param integer $orderId
+     * @param array $data
+     * @return void
+     */
     public function update(int $orderId, array $data)
     {
         Order::query()

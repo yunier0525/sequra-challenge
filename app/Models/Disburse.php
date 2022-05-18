@@ -28,6 +28,7 @@ class Disburse extends Model
     protected function disburse(): Attribute
     {
         return Attribute::make(
+            // Cast value of disburse to Brick/Money
             get: fn ($value) => Money::of($value, 'EUR')
         );
     }

@@ -32,6 +32,7 @@ class Order extends Model
     protected function amount(): Attribute
     {
         return Attribute::make(
+            // Cast value of amount to Brick/Money
             get: fn ($value) => Money::of($value, 'EUR')
         );
     }
