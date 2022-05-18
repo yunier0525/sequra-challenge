@@ -9,48 +9,48 @@ I have use Laravel to implement the challenge, so I leave you the instructions t
 - Docker Compose
 
 ## Set up environtment
-```bash
-./vendor/bin/sail up
-```
 
-## Set up App
-
-Enter to bash session
+### Install dependencies
 ```bash
-./vendor/bin/sail bash
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v $(pwd):/var/www/html \
+    -w /var/www/html \
+    laravelsail/php81-composer:latest \
+    composer install --ignore-platform-reqs
 ```
+### Config
 
 Prepare config
 ```bash
 cp .env.example .env
 ```
-Adjust the params with database name and credentials.
+You can use the default config.
 
-Default credentials are:
-```
-DB_USERNAME=sail
-DB_PASSWORD=password
+### Wake up the environment
+```bash
+./vendor/bin/sail up
 ```
 
 ### Running migrations
 ```bash
-php artisan migrate
+./vendor/bin/sail artisan migrate
 ```
 
 ### Seeding database
 ```bash
-php artisan db:seed
+./vendor/bin/sail artisan db:seed
 ```
 
 ### Listen for jobs execution
 ```bash
-php artisan queue:work
+./vendor/bin/sail artisan queue:work
 ```
 
 ### Execute job
 In a separated terminal execute th schedule command
 ```bash
-php artisan schedule:run
+./vendor/bin/sail artisan schedule:run
 ```
 This command executes the disbursements calculation and processes a batch of 500 items per run.
 
