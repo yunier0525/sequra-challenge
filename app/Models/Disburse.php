@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Brick\Money\Money;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,4 +19,16 @@ class Disburse extends Model
         'week',
         'year'
     ];
+
+    /**
+     * Get the amount of money.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function disburse(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => Money::of($value, 'EUR')
+        );
+    }
 }

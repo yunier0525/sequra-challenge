@@ -3,11 +3,12 @@
 namespace App\Repositories;
 
 use App\Models\Disburse;
+use Brick\Money\Money;
 use DateTime;
 
 class DisburseRepository
 {
-    public function updateDisbursement(int $merchantId, float $amount, DateTime $date)
+    public function updateDisbursement(int $merchantId, Money $amount, DateTime $date)
     {
         $week = intval($date->format('W'));
         $year = intval($date->format('Y'));
@@ -15,9 +16,12 @@ class DisburseRepository
         $disburse = $this->find($merchantId, $week, $year);
 
         if (empty($disburse->id)) {
-            $this->create($merchantId, $amount, $week, $year);
+            $this->create($merchantId, (string) $amount->getAmount(), $week, $year);
         } else {
-            $disburse->disburse += $amount;
+            // @var Money $total
+            $total = $disburse->disburse;
+            $total->plus($amount);
+            $disburse->disburse = (string) $total->getAmount();
             $disburse->save();
         }
     }
@@ -54,7 +58,7 @@ class DisburseRepository
         return $query->get();
     }
 
-    public function create(int $merchantId, float $amount, int $week, int $year): void
+    public function create(int $merchantId, string $amount, int $week, int $year): void
     {
         $disburse = new Disburse;
         $disburse->merchant_id = $merchantId;

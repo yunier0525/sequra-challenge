@@ -16,7 +16,7 @@ class DisburseResource extends JsonResource
     {
         return [
             'merchant_id' => $this->merchant_id,
-            'disburse' => $this->disburse,
+            'disburse' => floatval((string) $this->disburse->getAmount()),
             'week' => $this->week,
             'year' => $this->year
         ];

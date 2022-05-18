@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Brick\Money\Money;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Order extends Model
 {
@@ -21,4 +23,16 @@ class Order extends Model
         'created_at',
         'completed_at'
     ];
+
+    /**
+     * Get the amount of money.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function amount(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => Money::of($value, 'EUR')
+        );
+    }
 }
