@@ -60,3 +60,8 @@ Now the disbursements should appear in the disbursements table.
 At this point you must be able to get the disbursements through the API.
 
 There's one endpoint only at ```/disbursements```, is required to pass week param, based on year week. The merchant param is optional.
+
+## Run tests
+```bash
+./vendor/bin/sail artisan test
+```
